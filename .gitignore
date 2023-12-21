@@ -1,0 +1,4 @@
+# FILEPATH: /C:/u/usr/pro/VSC/python/09_Straker/UN-EU-corpus-Demo-streamlit/.gitignore
+tranfolder/
+.vscode
+__pycache__
