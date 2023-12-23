@@ -1,11 +1,4 @@
-conda remove --name streamlit4t --all
-
-conda info provides python version : 3.97.16.final.0 
-
-conda create --name streamlit4t  python=3.9
-
-conda activate streamlit4t
-conda install -c anaconda docopt
-pip install ctranslate2
-conda install -c fastai sentencepiece
-pip install streamlit
+ctranslate2>=3.23.0
+sentencepiece>=0.1.99
+streamlit>=1.29.0
+watchdog>=3.0.0
