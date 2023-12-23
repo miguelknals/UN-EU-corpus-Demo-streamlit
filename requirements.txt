@@ -2,3 +2,4 @@ ctranslate2>=3.23.0
 sentencepiece>=0.1.99
 streamlit>=1.29.0
 watchdog>=3.0.0
+docopt>=0.6.2
