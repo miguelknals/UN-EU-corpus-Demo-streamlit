@@ -3,12 +3,13 @@ import ee_normaliza as mytokdetok
 import sentencepiece as spm
 import ctranslate2 as ct
 
+
 def main():
     st.write ("""
               
               # Simple Stock Price App
               
-              """)
+              s""")
     
     
     tickerSymbol = 'STG.AX'

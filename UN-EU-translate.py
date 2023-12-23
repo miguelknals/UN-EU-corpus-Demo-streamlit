@@ -2,16 +2,29 @@ import streamlit as st
 import sentencepiece as spm
 import ctranslate2
 import ee_normaliza as mytokdetok
+import pandas as pd
 
 
-def get_source():
-    #main()
-    src_file= "tranfolder\\EURO-UN.en.01.10.txt"
-    myFileList= []
-    myFileList.append(src_file)
+
+
+@st.cache_data
+def translation_function(lang_pair, sources):
+    # load models
+     # Load models
+    translator, sp_source_model, sp_target_model = load_models(lang_pair, device="cpu")
+    # we can start the translation process
+    # first detokenize the source
+    wkging_dir="workdir/"
     tokenlist= "list.tkl"
     tagcasing=True
     varnum= False
+    # need to create a tmp file for transaltion stream
+    src_file= wkging_dir + "source.txt"
+    with open (src_file, encoding='utf-8', mode ='w') as ofile:
+        for l in sources:
+            ofile.write("{}\n".format(l))
+    myFileList= []
+    myFileList.append(src_file)
     # tokenize with tagcasig and no num variables
     mytokdetok.f_main_tokeniza(myFileList,tagcasing, tokenlist, varnum)
     # this will generate src.tok.tc
@@ -19,6 +32,7 @@ def get_source():
     # now we need sp. 
     # we need to read the sp file
     s_ifile1= src_file + ".tok.tc"
+    var_file= src_file + ".tok.tc.var"
     sp_source_list= []
     with open(s_ifile1, encoding='utf-8', mode ='r') as ifile1:
         while True:
@@ -27,110 +41,113 @@ def get_source():
             if not l1:
                 break
 
-    sp = spm.SentencePieceProcessor(model_file='spm\\bpe.model')
-    sp_bpe_list=sp.encode_as_pieces(sp_source_list)
+    sp_bpe_list=sp_source_model.encode_as_pieces(sp_source_list)
     # need to add sp.bos_id() and sp.eos_id()
     for s in sp_bpe_list:
         s.append("</s>")
         s.insert(0,"<s>")
+    # now we ctranslate
+    sp_bpe_translated_list=[] # results
+    TranslationResult_list=[] 
+    TranslationResult_list = translator.translate_batch(sp_bpe_list, return_scores=True)
     
-    return sp_bpe_list
+    for TranslationResult in TranslationResult_list:
+        print(TranslationResult.hypotheses[0])
+        print(TranslationResult.scores[0])
+        sp_bpe_translated_list.append(TranslationResult[0]["tokens"] )
+    # now se need to decode
+    target_list_tk=sp_target_model.decode(sp_bpe_translated_list)
+    # now need to normalize
+    s_ifile1= src_file + ".tok.tc.2tgt"
+    with open(s_ifile1, encoding='utf-8', mode ='w') as ifile1:
+        for l in target_list_tk:
+            ifile1.write("{}\n".format(l)) 
+    # now lets call again to ee_normaliza
+    myFileList=[]  
+    myFileList.append([s_ifile1,var_file])
+    mytokdetok.f_main_detokeniza(myFileList)
+    # 
+    # last step read the file
+    s_ifile1= src_file + ".tok.tc.2tgt.dtok.4cl"
+    final_translated_list= []
+    with open(s_ifile1, encoding='utf-8', mode ='r') as ifile1:
+        while True:
+            l1 = ifile1.readline().lstrip("\n")            
+            final_translated_list.append(l1)
+            print (l1)
+            if not l1:
+                break
+            
+    return final_translated_list
 
 
+    
+    
 
-def translate(source, translator, sp_source_model, sp_target_model):
-    """Use CTranslate model to translate a sentence
+    return
 
-    Args:
-        source (str): Source sentences to translate
-        translator (object): Object of Translator, with the CTranslate2 model
-        sp_source_model (object): Object of SentencePieceProcessor, with the SentencePiece source model
-        sp_target_model (object): Object of SentencePieceProcessor, with the SentencePiece target model
-    Returns:
-        Translation of the source text
-    """
-
-    #source_sentences = sent_tokenize(source)  # split sentences
-    #source_tokenized = sp_source_model.encode(source_sentences, out_type=str)
-    #translations = translator.translate_batch(source_tokenized, replace_unknowns=True)
-    translations = translator.translate_batch(source, replace_unknowns=True)
-    translations = [translation[0]["tokens"] for translation in translations]
-    translations_detokenized = sp_target_model.decode(translations)
-
-    return translations_detokenized
-
-
-# [Modify] File paths here to the CTranslate2 and SentencePiece models.
-@st.cache(allow_output_mutation=True)
-def load_models(lang_pair, device="cpu"):
-    """Load CTranslate2 model and SentencePiece models
-
-    Args:
-        lang_pair (str): Language pair to load the models for
-        device (str): "cpu" (default) or "cuda"
-    Returns:
-        CTranslate2 Translator and SentencePieceProcessor objects to load the models
-    """
+@st.cache_resource
+def load_models(lang_pair, device="auto"):
     if lang_pair == "English-to-French":
-        ct_model_path = "UN-EU-100K.pt\\" # this is a directory
-        sp_source_model_path = "spm\\bpe.model"
-        sp_target_model_path = "spm\\bpe.model"
-    #elif lang_pair == "French-to-English":
-    #    ct_model_path = "/path/to/your/ctranslate2/model/"
-    #    sp_source_model_path = "/path/to/your/sp_source.model"
-    #    sp_target_model_path = "/path/to/your/sp_target.model"
+        ct_model_path = "UN-EU-100K-EN2FR.pt/"
+        sp_source_model_path = "spm/bpe.model"
+        sp_target_model_path = "spm/bpe.model"
+    elif lang_pair == "French-to-English":
+        ct_model_path = "UN-EU-100K-FR2EN.pt/"
+        sp_source_model_path = "spm/bpe.model"
+        sp_target_model_path = "spm/bpe.model"
 
     sp_source_model = spm.SentencePieceProcessor(sp_source_model_path)
     sp_target_model = spm.SentencePieceProcessor(sp_target_model_path)
     translator = ctranslate2.Translator(ct_model_path, device)
-
+    
     return translator, sp_source_model, sp_target_model
+    
 
+def main():
+    st.set_page_config(page_title="EN<>FR UN-Euro corpus MT",
+                       layout="wide",
+                       page_icon="✨")
+    st.title("MT UN-Euro corpus EN<>FR")
+    st.write("Welcome to my app!")
+    if st.checkbox('Show some notes...'):
+        st.write('''
+                 ## Notes
+                 - This is a demo of a Streamlit app.
+                 - This is using **st.cache**.
+                 - This will be deployed to Heroku.                 
+                ''')
+    with st.form("my_form"): # need to add a button
+        # Dropdown
+        lang_pair = st.selectbox("Select Language Pair",
+                                ("English-to-French", "French-to-English"))
+        # input text 
+        user_input = st.text_area("Source Text", max_chars=2000)
+        # process input text
+        sources = user_input.split("\n")  # split on new line.
+        if len (sources) != 1 or sources[0].strip() != "":
+        #    # there is something to translate
+            final_translated_list=translation_function(lang_pair, sources)
+            df = pd.DataFrame({ 
+            'Source': sources,
+            'Target': final_translated_list[0:len(sources)]
+            } )
+            st.dataframe(df, use_container_width=True)
+        
+        st.write("Number of lines: {}".format(len(sources)))               
+        # Create a button
+        submitted = st.form_submit_button("Translate")
 
-# Title for the page and nice icon
-st.set_page_config(page_title="NMT", page_icon="🤖")
-# Header
-st.title("Translate")
+if __name__ == "__main__":
+    
+    main()
+    
+    # debug code
+    #sources=["To be held on Tuesday, 12 May 2015, at 3 p.m.", "2015 session"]
+    #final_translated_list=translation_function("English-to-French", sources)
+    #for tgt in final_translated_list:
+    #    print(tgt)
+        
+    
 
-# Form to add your items
-with st.form("my_form"):
-
-    # Dropdown menu to select a language pair
-    lang_pair = st.selectbox("Select Language Pair",
-                             ("English-to-French", "French-to-English"))
-    # st.write('You selected:', lang_pair)
-
-    # Textarea to type the source text.
-    user_input = st.text_area("Source Text", max_chars=200)
-    sources = user_input.split("\n")  # split on new line.
-
-    # Load models
-    translator, sp_source_model, sp_target_model = load_models(lang_pair, device="cpu")
-
-    # Translate with CTranslate2 model
-    source= get_source()
-    translations = [translate(source, translator, sp_source_model, sp_target_model) for source in sources]
-    translations = [" ". join(translation) for translation in translations] 
-
-    # Create a button
-    submitted = st.form_submit_button("Translate")
-    # If the button pressed, print the translation
-    if submitted:
-        st.write("Translation")
-        st.code("\n".join(translations))
-
-
-# Optional Style
-st.markdown(""" <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-
-    .reportview-container .main .block-container{
-        padding-top: 0rem;
-        padding-right: 0rem;
-        padding-left: 0rem;
-        padding-bottom: 0rem;
-    } </style> """, unsafe_allow_html=True)
-
-
+    
