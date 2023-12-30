@@ -31,8 +31,8 @@ FR->EN  |  **45.89** | 44.62
 #### Random sample EU ( Official Journal of the European Union, C 049, 9 February 2023 -  product specification for a name in the wine sector)
 Lang  |   UN-EUR-MT | GOOGLE
 ------------- | -------------| -------------
-EN->FR  | 26.19|  ** 33.48 **
-FR->EN  |  24.81 | ** 30.20**
+EN->FR  | 26.19|  **33.48**
+FR->EN  |  24.81 | **30.20**
 
 Note: This file probably is not very representative from other UN/EU texts, as is related to the wine sector. The purpose of this demo is show you can beat Google in specific domains (but probably not as a general purpose MT)
 
@@ -54,7 +54,7 @@ The following corpus have been used:
 
 UN sources counts aprox 70%, EU sources 30%. Total corpus size 22.6M sentences
 
-Once joined and removing duplicates, total size of the corpus for TM is aprox 22.14M sentences/ 558M words.
+Once joined and removing duplicates, **total size of the corpus used for this TM is aprox 22.14M sentences/ 558M words**.
 
 
 ## References and notes:
@@ -62,7 +62,6 @@ Once joined and removing duplicates, total size of the corpus for TM is aprox 22
 ### Notes:
 - This page has been partly based on CTranslate-NMT-Web-Interface (https://github.com/ymoslem/CTranslate-NMT-Web-Interface).
 - This repository has been created solely in my free time, belongs exclusvily to me and has not been sponsored by any organization
-- MIT license for all my code/files. To my best knowldege, I follow all copyrights/conditions according the reference links. 
 
 ### Refs:
 OpenNMT -> https://opennmt.net/
@@ -85,8 +84,5 @@ Joint Research Centre (JRC)- Acquis Communautaire (JRC-Acquis.3.0) -> https://jo
 
 European Commission's Directorate-General for Translation - Translation Memory -> https://joint-research-centre.ec.europa.eu/language-technology-resources/dgt-translation-memory_en
 
-## Misc
 
-(c) miguel canals, 2024 - www.mknals.com
-
-MIT License 
+(c) miguel canals, 2024 - miguelknals - www.mknals.com

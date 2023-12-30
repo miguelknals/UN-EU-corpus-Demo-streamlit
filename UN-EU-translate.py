@@ -136,21 +136,33 @@ def main():
                        layout="wide",
                        page_icon="✨")
     st.title("EN<>FR Machine Translation (MT) - United Nations and Europarl corpus") 
-    st.write("Welcome to my app!")
-    if st.checkbox('Show some notes...'):
-        st.write('''
-                 ## Notes
-                 - This is a demo of a Streamlit app.
-                 - This is using **st.cache**.
-                 - This will be deployed to Heroku.                 
-                ''')
+    st.write("##### This a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. Al these corpus have been cleaned")
+    st.write("Visit the [UN-EU-corpus-Demo-streamlit](https://github.com/miguelknals/UN-EU-corpus-Demo-streamlit/tree/main) repository for more information.  ")
+    st.write("You can visit the [United Nations Official Document System](https://documents.un.org/prod/ods.nsf/xpSearchResultsM.xsp)  to grab an example.")
+    #if st.checkbox('Show some notes...'):
+    #    st.write('''
+    #             ## Notes
+    #             - This is a demo of a Streamlit app.
+    #             - This is using **st.cache**.
+    #             - This will be deployed to Heroku.                 
+    #            ''')
     with st.form("my_form"): # need to add a button
         # Dropdown
         lang_pair = st.selectbox("##### Select Language Pair",
                                 ("English-to-French", "French-to-English"))
         # input text 
+        def_text= "United Nations S/2023/994\n"
+        def_text+="Security Council Distr.: General\n"
+        def_text+="15 December 2023\n"
+        def_text+="Original: English\n"
+        def_text+="23-25457 (E) 211223\n"
+        def_text+="*2325457*\n"
+        def_text+="Letter dated 15 December 2023 from the Permanent Representative of Pakistan to the United Nations addressed to the President of the Security Council\n" 
+        def_text+="I have the honour to transmit herewith a letter dated 14 December 2023 from the Foreign Minister of Pakistan, Jalil Abbas Jilani, addressed to you regarding the situation in disputed Jammu and Kashmir (see annex).\n"
+        def_text+="I would like to request that the present letter and its annex be circulated as a document of the Security Council in connection with the item entitled ""The India - Pakistan question""."
+        
         user_input = st.text_area("##### Enter your source text (Plain text without tags - ONE sentence per line - Max aprox 250 lines - NO GPU - aprox 1-2 seconds x sentence):", 
-                                  max_chars=30000)
+                                  max_chars=30000, value=def_text,height=250) 
         # process input text
         sources = user_input.split("\n")  # split on new line.
         if len (sources) != 1 or sources[0].strip() != "":
@@ -175,6 +187,8 @@ def main():
         st.write("Number of lines: {} (aprox 1-2 sec x sentence)".format(len(sources)))               
         # Create a button
         submitted = st.form_submit_button("Translate")
+    st.write("(c) 2024 miguelknals - MIT License")
+    
 
 if __name__ == "__main__":
     
