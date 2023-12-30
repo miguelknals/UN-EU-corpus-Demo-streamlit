@@ -1,4 +1,4 @@
-#EN<>FR Machine Translation (MT) based on cleaned United Nations and European Union corpora (UN-EUR-MT)
+# EN<>FR Machine Translation (MT) based on cleaned United Nations and European Union corpora (UN-EUR-MT)
 
 This a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. Al these corpus have been cleaned with:
 
@@ -18,7 +18,7 @@ We have used 3 pair texts and we have run the UN-EUR-MT and Google translator, i
 ##### UNv1.0.testset from the UN corpus paper (The United Nations Parallel Corpus v1.0 paper) 10.6K eng words
 
 Lang  | UN Moses (ref.)  |  UN-EUR-MT | GOOGLE
-------------- | -------------| -------------
+------------- | -------------| -------------| -------------
 EN->FR  | 50.33| ** 49.13** | 44.46
 FR->EN  | 52.58 | ** 50.88 ** | 45.27
 
