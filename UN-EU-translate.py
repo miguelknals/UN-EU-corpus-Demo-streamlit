@@ -146,11 +146,11 @@ def main():
                 ''')
     with st.form("my_form"): # need to add a button
         # Dropdown
-        lang_pair = st.selectbox("Select Language Pair",
+        lang_pair = st.selectbox("##### Select Language Pair",
                                 ("English-to-French", "French-to-English"))
         # input text 
-        user_input = st.text_area("Enter your source text (Plain text without tags - ONE sentence per line - Max aprox 200 lines - NO GPU - aprox 1-2 seconds x sentence):", 
-                                  max_chars=50000)
+        user_input = st.text_area("##### Enter your source text (Plain text without tags - ONE sentence per line - Max aprox 250 lines - NO GPU - aprox 1-2 seconds x sentence):", 
+                                  max_chars=30000)
         # process input text
         sources = user_input.split("\n")  # split on new line.
         if len (sources) != 1 or sources[0].strip() != "":
@@ -161,7 +161,16 @@ def main():
             'Source': sources,
             'Target': final_translated_list[0:len(sources)]
             } )
+            st.write("## Translation table")
+            #pd.set_option('display.index', False)
+            df2=df.iloc[:, 1:] # removing Pred:
+            st.table(df2.set_index(df2.columns[0]))
+            #st.table(df.set_index(df.columns[0]))
+            st.write("### Data download")
+            st.write("-You can download the results as a CSV file")
+            st.write("-Pred. score is the average of the neg likelihood of the translation (there is not an easy correlation with translation quality or confidence)")
             st.dataframe(df, use_container_width=True)
+            
         
         st.write("Number of lines: {} (aprox 1-2 sec x sentence)".format(len(sources)))               
         # Create a button
