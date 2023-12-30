@@ -15,27 +15,24 @@ This repository has been designed to be deployed in streamlit as a public applic
 
 We have used 3 pair texts and we have run the UN-EUR-MT and Google translator, in each case, we use as reference, the translation provided for these examples.
 
-##### UNv1.0.testset from the UN corpus paper (The United Nations Parallel Corpus v1.0 paper) 10.6K eng words
+#### UNv1.0.testset from the UN corpus paper (The United Nations Parallel Corpus v1.0 paper) 10.6K eng words
 
 Lang  | UN Moses (ref.)  |  UN-EUR-MT | GOOGLE
 ------------- | -------------| -------------| -------------
-EN->FR  | 50.33| ** 49.13** | 44.46
-FR->EN  | 52.58 | ** 50.88 ** | 45.27
+EN->FR  | 50.33| **49.13** | 44.46
+FR->EN  | 52.58 | **50.88** | 45.27
 
-##### Random sample UN resolution ( RESOLUTION 2713 (2023) /ADOPTED BY THE SECURITY COUNCIL AT ITS 9490TH MEETING, ON 1 DECEMBER 2023) 5.3K eng words
+#### Random sample UN resolution ( RESOLUTION 2713 (2023) /ADOPTED BY THE SECURITY COUNCIL AT ITS 9490TH MEETING, ON 1 DECEMBER 2023) 5.3K eng words
 Lang  |   UN-EUR-MT | GOOGLE
 ------------- | -------------| -------------
 EN->FR  | **42.00**| 41.25
 FR->EN  |  **45.89** | 44.62
 
-#####  Random sample EU ( Official Journal of the European Union, C 049, 9 February 2023 -  product specification for a name in the wine sector)
+#### Random sample EU ( Official Journal of the European Union, C 049, 9 February 2023 -  product specification for a name in the wine sector)
 Lang  |   UN-EUR-MT | GOOGLE
 ------------- | -------------| -------------
 EN->FR  | 26.19|  ** 33.48 **
 FR->EN  |  24.81 | ** 30.20**
-
-EN->FR 26.19 (UN-EUR-MT) 33.48 (GOOGLE) 33.56 (DeepLStraker) 
-FR->EN 24.81 (UN-EUR-MT) 30.20 (GOOGLE) 30.26 (DeepLStraker)
 
 Note: This file probably is not very representative from other UN/EU texts, as is related to the wine sector. The purpose of this demo is show you can beat Google in specific domains (but probably not as a general purpose MT)
 
@@ -45,7 +42,7 @@ Note: This file probably is not very representative from other UN/EU texts, as i
 - UN-EUR-MT probably is better for legal/UN/EU texts than Google (according BLEU by a small margin) , but lags behind in more general contexts (the wine sector test file)
 - Probably additional analysis have to be done to decide a "winner" if any. 
 
-##United Nations and European Community corpora used
+## United Nations and European Community corpora used
 
 The following corpus have been used:
 
@@ -87,3 +84,9 @@ Digital Corpus of the European Parliament -> https://wt-public.emm4u.eu/Resource
 Joint Research Centre (JRC)- Acquis Communautaire (JRC-Acquis.3.0) -> https://joint-research-centre.ec.europa.eu/language-technology-resources/jrc-acquis_en
 
 European Commission's Directorate-General for Translation - Translation Memory -> https://joint-research-centre.ec.europa.eu/language-technology-resources/dgt-translation-memory_en
+
+## Misc
+
+(c) miguel canals, 2024 - www.mknals.com
+
+MIT License 
