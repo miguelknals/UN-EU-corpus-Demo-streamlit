@@ -3,7 +3,7 @@ import sentencepiece as spm
 import ctranslate2
 import ee_normaliza as mytokdetok
 import pandas as pd
-
+import math
 
 
 
@@ -47,14 +47,41 @@ def translation_function(lang_pair, sources):
         s.append("</s>")
         s.insert(0,"<s>")
     # now we ctranslate
+    with open(s_ifile1+".sp", encoding='utf-8', mode ='w') as ifile1:
+        for s in sp_bpe_list:
+            l=""
+            for w in s:
+                l+=w
+            ifile1.write("{}\n".format(l))
+        
     sp_bpe_translated_list=[] # results
+    sp_bpe_translated_list_scores=[]
     TranslationResult_list=[] 
     TranslationResult_list = translator.translate_batch(sp_bpe_list, return_scores=True)
+    # for debug
+    with open(s_ifile1+".sp.2tgt.sp", encoding='utf-8', mode ='w') as ifile1:
+        for TranslationResult in TranslationResult_list:
+            tgt_sentence=TranslationResult.hypotheses[0]
+            l=""
+            for w in tgt_sentence:
+                l+=w
+            ifile1.write("{}\n".format(l))
+    
+    
+    
+    
     
     for TranslationResult in TranslationResult_list:
-        print(TranslationResult.hypotheses[0])
-        print(TranslationResult.scores[0])
-        sp_bpe_translated_list.append(TranslationResult[0]["tokens"] )
+        tgt_sentence=TranslationResult.hypotheses[0]
+        tgt_sentence_score=TranslationResult.scores[0]
+        aux=len(tgt_sentence)
+        if aux==0:
+            aux=1
+        tgt_sentence_score_average=math.exp(TranslationResult.scores[0]/aux)*100
+        print(tgt_sentence)
+        print(tgt_sentence_score)
+        sp_bpe_translated_list.append(tgt_sentence) # translation
+        sp_bpe_translated_list_scores.append(tgt_sentence_score_average ) # scores
     # now se need to decode
     target_list_tk=sp_target_model.decode(sp_bpe_translated_list)
     # now need to normalize
@@ -78,7 +105,7 @@ def translation_function(lang_pair, sources):
             if not l1:
                 break
             
-    return final_translated_list
+    return final_translated_list, sp_bpe_translated_list_scores
 
 
     
@@ -89,11 +116,11 @@ def translation_function(lang_pair, sources):
 @st.cache_resource
 def load_models(lang_pair, device="auto"):
     if lang_pair == "English-to-French":
-        ct_model_path = "UN-EU-100K-EN2FR.pt/"
+        ct_model_path = "UN-EU-EN2FR-100K.pt/"
         sp_source_model_path = "spm/bpe.model"
         sp_target_model_path = "spm/bpe.model"
     elif lang_pair == "French-to-English":
-        ct_model_path = "UN-EU-100K-FR2EN.pt/"
+        ct_model_path = "UN-EU-FR2EN-100K.pt/"
         sp_source_model_path = "spm/bpe.model"
         sp_target_model_path = "spm/bpe.model"
 
@@ -108,7 +135,7 @@ def main():
     st.set_page_config(page_title="EN<>FR UN-Euro corpus MT",
                        layout="wide",
                        page_icon="✨")
-    st.title("MT UN-Euro corpus EN<>FR")
+    st.title("EN<>FR Machine Translation (MT) - United Nations and Europarl corpus") 
     st.write("Welcome to my app!")
     if st.checkbox('Show some notes...'):
         st.write('''
@@ -122,19 +149,21 @@ def main():
         lang_pair = st.selectbox("Select Language Pair",
                                 ("English-to-French", "French-to-English"))
         # input text 
-        user_input = st.text_area("Source Text", max_chars=2000)
+        user_input = st.text_area("Enter your source text (Plain text without tags - ONE sentence per line - Max aprox 200 lines - NO GPU - aprox 1-2 seconds x sentence):", 
+                                  max_chars=50000)
         # process input text
         sources = user_input.split("\n")  # split on new line.
         if len (sources) != 1 or sources[0].strip() != "":
         #    # there is something to translate
-            final_translated_list=translation_function(lang_pair, sources)
+            final_translated_list, scores_list=translation_function(lang_pair, sources)
             df = pd.DataFrame({ 
+            'Pred:': scores_list[0:len(sources)],
             'Source': sources,
             'Target': final_translated_list[0:len(sources)]
             } )
             st.dataframe(df, use_container_width=True)
         
-        st.write("Number of lines: {}".format(len(sources)))               
+        st.write("Number of lines: {} (aprox 1-2 sec x sentence)".format(len(sources)))               
         # Create a button
         submitted = st.form_submit_button("Translate")
 
@@ -143,8 +172,11 @@ if __name__ == "__main__":
     main()
     
     # debug code
-    #sources=["To be held on Tuesday, 12 May 2015, at 3 p.m.", "2015 session"]
-    #final_translated_list=translation_function("English-to-French", sources)
+    sources=["1.1 L’auteur de la communication est G. S.",
+"1.1 L’auteur de la communication est G. S., de nationalité roumaine.",
+"1.1 L’auteur de la communication est G. S., de nationalité roumaine, né en 1962. "]
+    sources=["1.1 The author of the communication is G.S. a national of Romania, born in 1962. "]
+    #final_translated_list=translation_function("English-to-French",sources)
     #for tgt in final_translated_list:
     #    print(tgt)
         
