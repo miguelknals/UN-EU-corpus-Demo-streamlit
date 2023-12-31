@@ -7,7 +7,7 @@ UN-EUR-MT is a working MT for ENG<>FRE based on the UN bilingual corpus and seve
 
 This has assured that the corpora have good quality and with probably very few few unalignment sentences or very disimilar sentences. Final corpora has total size of aprox 22.14M sentences/ 558M words.
 
-We have used OpenNMT toolkit, to replicate the Google's transformer model. 
+We have used OpenNMT toolkit, to replicate the Google's transformer model, and its inferance CTranslate2 for an efficient translation. 
 
 This repository has been designed to be deployed in streamlit as a public application  -> https://un-eu-corpus-demo.streamlit.app/
 
@@ -65,6 +65,8 @@ Once joined and removing duplicates, **total size of the corpus used for this MT
 
 ### Refs:
 OpenNMT -> https://opennmt.net/
+
+CTranslate2 -> https://github.com/OpenNMT/CTranslate2
 
 Attention is all you need (Transformer model) -> https://arxiv.org/abs/1706.03762
 
