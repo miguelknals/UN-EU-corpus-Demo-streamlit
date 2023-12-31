@@ -1,6 +1,6 @@
 # EN<>FR Machine Translation (MT) based on cleaned United Nations and European Union corpora (UN-EUR-MT)
 
-This a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. All these corpora have been cleaned with:
+UN-EUR-MT is a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. All these corpora have been cleaned with:
 
 - Physical cleaning (custom scripts i.e. removing lines with more than 1 sentence, text between parenthesis)
 - Semantical filtering based on Unbabel COMET score with the reference free model Unbabel/wmt22-cometkiwi-da
@@ -54,7 +54,7 @@ The following corpus have been used:
 
 UN sources counts aprox 70%, EU sources 30%. Total corpus size 22.6M sentences
 
-Once joined and removing duplicates, **total size of the corpus used for this TM is aprox 22.14M sentences/ 558M words**.
+Once joined and removing duplicates, **total size of the corpus used for this MT is aprox 22.14M sentences/ 558M words**.
 
 
 ## References and notes:

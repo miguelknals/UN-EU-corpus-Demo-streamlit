@@ -136,7 +136,7 @@ def main():
                        layout="wide",
                        page_icon="✨")
     st.title("EN<>FR Machine Translation (MT) - United Nations and Europarl corpus") 
-    st.write("##### This a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. Al these corpus have been cleaned")
+    st.write("##### UN-EUR-MT is a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. All these corpora have been cleaned.")
     st.write("Visit the [UN-EU-corpus-Demo-streamlit](https://github.com/miguelknals/UN-EU-corpus-Demo-streamlit/tree/main) repository for more information.  ")
     st.write("You can visit the [United Nations Official Document System](https://documents.un.org/prod/ods.nsf/xpSearchResultsM.xsp)  to grab an example.")
     #if st.checkbox('Show some notes...'):
