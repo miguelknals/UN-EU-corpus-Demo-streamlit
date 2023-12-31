@@ -1,11 +1,11 @@
 # EN<>FR Machine Translation (MT) based on cleaned United Nations and European Union corpora (UN-EUR-MT)
 
-This a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. Al these corpus have been cleaned with:
+This a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. All these corpora have been cleaned with:
 
-- Physical cleanning (custom scripts i.e. removing lines with more than 1 sentece, text between parenthesis)
+- Physical cleaning (custom scripts i.e. removing lines with more than 1 sentence, text between parenthesis)
 - Semantical filtering based on Unbabel COMET score with the reference free model Unbabel/wmt22-cometkiwi-da
 
-This has assured that the corpora has good quality and with probably very few unaligment senteces or very disimilar sentences. Final corpora has total size of aprox 22.14M sentences/ 558M words.
+This has assured that the corpora have good quality and with probably very few few unalignment sentences or very disimilar sentences. Final corpora has total size of aprox 22.14M sentences/ 558M words.
 
 We have used OpenNMT toolkit, to replicate the Google's transformer model. 
 
@@ -36,11 +36,11 @@ FR->EN  |  24.81 | **30.20**
 
 Note: This file probably is not very representative from other UN/EU texts, as is related to the wine sector. The purpose of this demo is show you can beat Google in specific domains (but probably not as a general purpose MT)
 
-## Conlusions
+## Conclusions
 
-- Remeber BLEU score is just an statistical score, that troubles with NMT models in terms of fluency and construction.
+- Remember BLEU score is just a statistical score, that troubles with NMT models in terms of fluency and construction.
 - UN-EUR-MT probably is better for legal/UN/EU texts than Google (according BLEU by a small margin) , but lags behind in more general contexts (the wine sector test file)
-- Probably additional analysis have to be done to decide a "winner" if any. 
+- Probably additional analysis has to be done to decide a "winner" if any. 
 
 ## United Nations and European Community corpora used
 
@@ -61,7 +61,7 @@ Once joined and removing duplicates, **total size of the corpus used for this TM
 
 ### Notes:
 - This page has been partly based on CTranslate-NMT-Web-Interface (https://github.com/ymoslem/CTranslate-NMT-Web-Interface).
-- This repository has been created solely in my free time, belongs exclusvily to me and has not been sponsored by any organization
+- This repository has been created solely in my free time, belongs exclusively to me and has not been sponsored by any organization
 
 ### Refs:
 OpenNMT -> https://opennmt.net/
