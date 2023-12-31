@@ -138,7 +138,7 @@ def main():
     st.title("EN<>FR Machine Translation (MT) - United Nations and Europarl corpus") 
     st.write("##### UN-EUR-MT is a working MT for ENG<>FRE based on the UN bilingual corpus and several other smaller corpora from the European Union. All these corpora have been cleaned.")
     st.write("Visit the [UN-EU-corpus-Demo-streamlit](https://github.com/miguelknals/UN-EU-corpus-Demo-streamlit/tree/main) repository for more information.  ")
-    st.write("You can visit the [United Nations Official Document System](https://documents.un.org/prod/ods.nsf/xpSearchResultsM.xsp)  to grab an example.")
+    st.write("You can visit the [United Nations Official Document System](https://documents.un.org/prod/ods.nsf/home.xsp)  to grab an example.")
     #if st.checkbox('Show some notes...'):
     #    st.write('''
     #             ## Notes
@@ -180,7 +180,7 @@ def main():
             #st.table(df.set_index(df.columns[0]))
             st.write("### Data download")
             st.write("-You can download the results as a CSV file")
-            st.write("-Pred. score is the average of the neg likelihood of the translation (there is not an easy correlation with translation quality or confidence)")
+            st.write("-Pred. score is the average of the neg log likelihood of the translation (there is not an easy correlation with translation quality or confidence)")
             st.dataframe(df, use_container_width=True)
             
         
