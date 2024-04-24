@@ -9,6 +9,3 @@ conda install -c anaconda docopt
 pip install ctranslate2
 conda install -c fastai sentencepiece
 pip install streamlit
-pip install openai
-pip install streamlit-chat
-pip install python-dotenv

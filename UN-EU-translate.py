@@ -1,10 +1,12 @@
 import streamlit as st
 import sentencepiece as spm
 import ctranslate2
-import ee_normaliza as mytokdetok
 import pandas as pd
 import math
-
+# mine
+import ee_normaliza as mytokdetok
+import Simple_DETOK
+import Simple_TOK
 
 
 @st.cache_data
@@ -15,24 +17,17 @@ def translation_function(lang_pair, sources):
     # we can start the translation process
     # first detokenize the source
     wkging_dir="workdir/"
-    tokenlist= "list.tkl"
-    tagcasing=True
-    varnum= False
     # need to create a tmp file for transaltion stream
     src_file= wkging_dir + "source.txt"
     with open (src_file, encoding='utf-8', mode ='w') as ofile:
         for l in sources:
             ofile.write("{}\n".format(l))
-    myFileList= []
-    myFileList.append(src_file)
     # tokenize with tagcasig and no num variables
-    mytokdetok.f_main_tokeniza(myFileList,tagcasing, tokenlist, varnum)
-    # this will generate src.tok.tc
-    #                    src.tok.tc.var
+    Simple_TOK.func_main_process(src_file)
+    # this will generate source.txt.tok
     # now we need sp. 
     # we need to read the sp file
-    s_ifile1= src_file + ".tok.tc"
-    var_file= src_file + ".tok.tc.var"
+    s_ifile1= src_file + ".tok"
     sp_source_list= []
     with open(s_ifile1, encoding='utf-8', mode ='r') as ifile1:
         while True:
@@ -51,7 +46,7 @@ def translation_function(lang_pair, sources):
         for s in sp_bpe_list:
             l=""
             for w in s:
-                l+=w
+                l+=" " + w
             ifile1.write("{}\n".format(l))
         
     sp_bpe_translated_list=[] # results
@@ -64,12 +59,11 @@ def translation_function(lang_pair, sources):
             tgt_sentence=TranslationResult.hypotheses[0]
             l=""
             for w in tgt_sentence:
-                l+=w
+                l+=" "+ w
             ifile1.write("{}\n".format(l))
     
     
-    
-    
+     
     
     for TranslationResult in TranslationResult_list:
         tgt_sentence=TranslationResult.hypotheses[0]
@@ -85,17 +79,15 @@ def translation_function(lang_pair, sources):
     # now se need to decode
     target_list_tk=sp_target_model.decode(sp_bpe_translated_list)
     # now need to normalize
-    s_ifile1= src_file + ".tok.tc.2tgt"
+    s_ifile1= src_file + ".tok.2tgt" # from .tok.2tgt.sp to .tok.2tgt
     with open(s_ifile1, encoding='utf-8', mode ='w') as ifile1:
         for l in target_list_tk:
             ifile1.write("{}\n".format(l)) 
     # now lets call again to ee_normaliza
-    myFileList=[]  
-    myFileList.append([s_ifile1,var_file])
-    mytokdetok.f_main_detokeniza(myFileList)
+    Simple_DETOK.func_main_process(s_ifile1 )
     # 
     # last step read the file
-    s_ifile1= src_file + ".tok.tc.2tgt.dtok.4cl"
+    s_ifile1= src_file + ".tok.2tgt.detok"
     final_translated_list= []
     with open(s_ifile1, encoding='utf-8', mode ='r') as ifile1:
         while True:
@@ -109,18 +101,17 @@ def translation_function(lang_pair, sources):
 
 
     
-    
 
     return
 
 @st.cache_resource
 def load_models(lang_pair, device="auto"):
     if lang_pair == "English-to-French":
-        ct_model_path = "UN-EU-EN2FR-100K.pt/"
+        ct_model_path = "enfr_ctranslate2/"
         sp_source_model_path = "spm/bpe.model"
         sp_target_model_path = "spm/bpe.model"
     elif lang_pair == "French-to-English":
-        ct_model_path = "UN-EU-FR2EN-100K.pt/"
+        ct_model_path = "fren_ctranslate2/"
         sp_source_model_path = "spm/bpe.model"
         sp_target_model_path = "spm/bpe.model"
 

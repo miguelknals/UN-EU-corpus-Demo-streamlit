@@ -56,7 +56,10 @@ UN sources counts aprox 70%, EU sources 30%. Total corpus size 22.6M sentences
 
 Once joined and removing duplicates, **total size of the corpus used for this MT is aprox 22.14M sentences/ 558M words**.
 
-## TEST
+## Update 2024:
+
+Model has been updated and a new simplified tokenizer used. Model should have
+been slightly improved (aprox 1 BLEU score point.)
 
 ## References and notes:
 
