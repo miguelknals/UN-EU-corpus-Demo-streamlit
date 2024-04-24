@@ -4,7 +4,6 @@ import ctranslate2
 import pandas as pd
 import math
 # mine
-import ee_normaliza as mytokdetok
 import Simple_DETOK
 import Simple_TOK
 
